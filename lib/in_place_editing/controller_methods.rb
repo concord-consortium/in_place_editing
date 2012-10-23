@@ -21,7 +21,10 @@ module InPlaceEditing
         end
         @item = object.to_s.camelize.constantize.find(params[:id])
         @item.update_attribute(attribute, params[:value])
-        render :text => CGI::escapeHTML(@item.send(attribute).to_s)
+        blank_value = options[:blank_value] || "(click to add a #{attribute})"
+        value = @item.send(attribute).to_s
+        value = blank_value if value.blank?
+        render :text => CGI::escapeHTML(value)
       end
     end
   end

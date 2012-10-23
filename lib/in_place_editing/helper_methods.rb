@@ -70,7 +70,7 @@ module InPlaceMacrosHelper
   end
   
   # Renders the value of the specified object and method with in-place editing capabilities.
-  def in_place_editor_field(object_or_name, method, tag_options = {}, in_place_editor_options = {})
+  def in_place_editor_field(object_or_name, method, tag_options = {}, in_place_editor_options = {}, blank_value = nil)
     if object_or_name.respond_to? :to_model
       object_name = object_or_name.to_model.class.model_name.singular
       object = object_or_name.to_model
@@ -84,7 +84,10 @@ module InPlaceMacrosHelper
                    :id => "#{object_name}_#{method}_#{instance_tag.object.id}_in_place_editor",
                    :class => "in_place_editor_field"}.merge!(tag_options)
     in_place_editor_options[:url] = in_place_editor_options[:url] || url_for({ :action => "set_#{object_name}_#{method}", :id => instance_tag.object.id })
-    tag = content_tag(tag_options.delete(:tag), h(instance_tag.value(instance_tag.object)),tag_options)
+    value = instance_tag.value(instance_tag.object)
+    blank_value ||= "(click to add a #{method})"
+    value = blank_value if value.blank?
+    tag = content_tag(tag_options.delete(:tag), h(value),tag_options)
     return tag + in_place_editor(tag_options[:id], in_place_editor_options)
   end
 end
