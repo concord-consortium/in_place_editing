@@ -84,6 +84,8 @@ module InPlaceMacrosHelper
                    :id => "#{object_name}_#{method}_#{instance_tag.object.id}_in_place_editor",
                    :class => "in_place_editor_field"}.merge!(tag_options)
     in_place_editor_options[:url] = in_place_editor_options[:url] || url_for({ :action => "set_#{object_name}_#{method}", :id => instance_tag.object.id })
+    in_place_editor_options[:load_text_url] = in_place_editor_options[:load_text_url] || url_for({ :action => "get_#{object_name}_#{method}", :id => instance_tag.object.id })    
+    
     value = instance_tag.value(instance_tag.object)
     blank_value ||= "(click to add a #{method})"
     value = blank_value if value.blank?

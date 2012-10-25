@@ -26,6 +26,11 @@ module InPlaceEditing
         value = blank_value if value.blank?
         render :text => CGI::escapeHTML(value)
       end
+      define_method("get_#{object}_#{attribute}") do
+        item = object.to_s.camelize.constantize.find(params[:id])
+        value = item.send(attribute).to_s
+        render :text => CGI::escapeHTML(value)
+      end
     end
   end
 end
